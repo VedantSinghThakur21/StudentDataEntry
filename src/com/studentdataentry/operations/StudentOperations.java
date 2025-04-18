@@ -8,23 +8,31 @@ import com.studentdataentry.model.Student;
 import java.sql.*;
 import java.util.Scanner;
 
+/**
+ * StudentOperations class provides core functionality for CRUD operations
+ * (Create, Read, Update, Delete) on Student records in the database.
+ */
 public class StudentOperations {
-    private final Scanner sc = new Scanner(System.in);
+    private final Scanner sc = new Scanner(System.in);// Scanner for user input
 
+    /**
+     * Inserts a new student record into the database after validating input.
+     */
     public void insertStudent() {
         try (Connection conn = DatabaseConnector.getConnection()) {
             System.out.print("Enter ID: ");
             int id = sc.nextInt();
-            sc.nextLine();
+            sc.nextLine(); // Consume newline
 
             System.out.print("Enter Name: ");
             String name = sc.nextLine();
-            validateName(name);
+            validateName(name); // Validate name before insertion
 
             System.out.print("Enter Age: ");
             int age = sc.nextInt();
-            validateAge(age);
+            validateAge(age); // Validate age before insertion
 
+            // Prepare SQL insert statement
             String query = "INSERT INTO students (id, name, age) VALUES (?, ?, ?)";
             PreparedStatement pstmt = conn.prepareStatement(query);
             pstmt.setInt(1, id);
@@ -38,6 +46,9 @@ public class StudentOperations {
         }
     }
 
+    /**
+     * Displays all student records from the database.
+     */
     public void displayStudents() {
         try (Connection conn = DatabaseConnector.getConnection();
              Statement stmt = conn.createStatement();
@@ -53,6 +64,9 @@ public class StudentOperations {
         }
     }
 
+    /**
+     * Updates an existing student's name and age in the database.
+     */
     public void updateStudent() {
         try (Connection conn = DatabaseConnector.getConnection()) {
             System.out.print("Enter Student ID to Update: ");
@@ -81,6 +95,9 @@ public class StudentOperations {
         }
     }
 
+    /**
+     * Deletes a student record based on the given ID.
+     */
     public void deleteStudent() {
         try (Connection conn = DatabaseConnector.getConnection()) {
             System.out.print("Enter Student ID to Delete: ");
@@ -98,12 +115,24 @@ public class StudentOperations {
         }
     }
 
+    /**
+     * Validates the student's name.
+     *
+     * @param name Name to validate
+     * @throws InvalidNameException if name is null or contains non-alphabetic characters
+     */
     private void validateName(String name) throws InvalidNameException {
         if (name == null || !name.matches("[A-Za-z ]+")) {
             throw new InvalidNameException("Name must contain only letters and spaces.");
         }
     }
 
+    /**
+     * Validates the student's age.
+     *
+     * @param age Age to validate
+     * @throws InvalidAgeException if age is not within a realistic range
+     */
     private void validateAge(int age) throws InvalidAgeException {
         if (age <= 0 || age > 150) {
             throw new InvalidAgeException("Age must be between 1 and 150.");
