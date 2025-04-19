@@ -1,3 +1,7 @@
+// Name : Vedant Singh Thakur
+// PRN : 23070126144
+// Batch : AIML B3
+
 package com.studentdataentry;
 
 import com.studentdataentry.model.Student;
